@@ -3,16 +3,17 @@
 
 <template>
   <header>
-    <h1 class="text-gradient">SMOLGRAM</h1>
+    <h1 class="text-gradient">FITGRAM</h1>
   </header>
   <main>
-    <slot/>
+    <slot />
   </main>
   <footer>
     <small>Created by</small>
     <a href="https://github.com/MariyaN23" target="_blank">
-      <img src="https://avatars.githubusercontent.com/u/138151774?v=4" alt="pfp"/>
+      <img src="https://avatars.githubusercontent.com/u/138151774?v=4" alt="pfp" />
       <p>MariyaN23</p>
+      <i class="fa-brands fa-github"></i>
     </a>
   </footer>
 </template>

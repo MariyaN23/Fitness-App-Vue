@@ -1,11 +1,29 @@
 <script setup lang="ts">
-import { workoutProgram } from "../../utils";
+import { exerciseDescriptions, workoutProgram } from "../../utils";
+import Portal from "../Portal.vue";
+import { computed, ref } from "vue";
 
 const selectedWorkouts = 4
 const {workout, warmup} = workoutProgram[selectedWorkouts]
+let selectedExercise = ref<string>("")
+const exerciseDescription = computed(() => exerciseDescriptions[selectedExercise.value])
+const handleCloseModal = () => selectedExercise.value = ""
 </script>
 
 <template>
+  <Portal v-if="selectedExercise">
+    <div class="exercise-description">
+      <h3>{{ selectedExercise }}</h3>
+      <div>
+        <small>Description</small>
+        <p>{{ exerciseDescription }}</p>
+      </div>
+      <button @click="handleCloseModal">
+        Close
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+  </Portal>
   <section id="workout-card">
     <div class="plan-card card">
       <div class="plan-card-header">
@@ -22,7 +40,7 @@ const {workout, warmup} = workoutProgram[selectedWorkouts]
       <div class="workout-grid-row" v-for="(w, wIdx) in warmup" :key="wIdx">
         <div class="grid-name">
           <p>{{ w.name }}</p>
-          <button>
+          <button @click="() => selectedExercise = w.name">
             <i class="fa-regular fa-circle-question"></i>
           </button>
         </div>
@@ -38,7 +56,7 @@ const {workout, warmup} = workoutProgram[selectedWorkouts]
       <div class="workout-grid-row" v-for="(w, wIdx) in workout" :key="wIdx">
         <div class="grid-name">
           <p>{{ w.name }}</p>
-          <button>
+          <button @click="() => selectedExercise = w.name">
             <i class="fa-regular fa-circle-question"></i>
           </button>
         </div>
@@ -62,7 +80,8 @@ const {workout, warmup} = workoutProgram[selectedWorkouts]
 
 <style scoped>
 #workout-card,
-.plan-card {
+.plan-card,
+.exercise-description {
   display: flex;
   flex-direction: column;
 }
@@ -134,5 +153,18 @@ const {workout, warmup} = workoutProgram[selectedWorkouts]
 
 .workout-buttons button i {
   padding-left: 0.5rem;
+}
+
+.exercise-description {
+  gap: 1rem;
+  width: 100%;
+}
+
+.exercise-description button i {
+  padding-left: 0.5rem;
+}
+
+.exercise-description h3 {
+  text-transform: capitalize;
 }
 </style>

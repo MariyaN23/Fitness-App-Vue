@@ -11,7 +11,7 @@ const handleCloseModal = () => selectedExercise.value = ""
 </script>
 
 <template>
-  <Portal v-if="selectedExercise">
+  <Portal :handleCloseModal="handleCloseModal" v-if="selectedExercise">
     <div class="exercise-description">
       <h3>{{ selectedExercise }}</h3>
       <div>

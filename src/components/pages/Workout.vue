@@ -2,9 +2,16 @@
 import { exerciseDescriptions, workoutProgram } from "../../utils";
 import Portal from "../Portal.vue";
 import { computed, ref } from "vue";
+import type { ExerciseData } from "../../types/workout.types.ts";
 
-const selectedWorkouts = 4
-const {workout, warmup} = workoutProgram[selectedWorkouts]
+const {data, selectedWorkout} = defineProps<{
+  handleSaveWorkout: () => void
+  isWorkoutComplete: boolean
+  selectedWorkout: number
+  data: ExerciseData
+}>()
+
+const {workout, warmup} = workoutProgram[selectedWorkout]
 let selectedExercise = ref<string>("")
 const exerciseDescription = computed(() => exerciseDescriptions[selectedExercise.value])
 const handleCloseModal = () => selectedExercise.value = ""
@@ -27,7 +34,7 @@ const handleCloseModal = () => selectedExercise.value = ""
   <section id="workout-card">
     <div class="plan-card card">
       <div class="plan-card-header">
-        <p>Day {{ selectedWorkouts < 9 ? '0' + selectedWorkouts : selectedWorkouts }}</p>
+        <p>Day {{ selectedWorkout < 9 ? '0' + (selectedWorkout + 1) : (selectedWorkout + 1) }}</p>
         <i class="fa-solid fa-dumbbell"></i>
       </div>
       <h2>{{ 'Push' }} Workout</h2>
@@ -46,7 +53,7 @@ const handleCloseModal = () => selectedExercise.value = ""
         </div>
         <p>{{ w.sets }}</p>
         <p>{{ w.reps }}</p>
-        <input class="grid-weights" placeholder="14kg" type="text" disabled />
+        <input name="warmup" class="grid-weights" placeholder="14kg" type="text" disabled />
       </div>
       <div class="workout-grid-line"></div>
       <h4 class="grid-name">Workout</h4>
@@ -62,15 +69,16 @@ const handleCloseModal = () => selectedExercise.value = ""
         </div>
         <p>{{ w.sets }}</p>
         <p>{{ w.reps }}</p>
-        <input class="grid-weights" placeholder="14kg" type="text" />
+        <input v-model="data[selectedWorkout][w.name]" name="workout" class="grid-weights" placeholder="14kg"
+               type="text" />
       </div>
     </div>
     <div class="workout-buttons card">
-      <button>
+      <button @click="handleSaveWorkout">
         Save & Exit
         <i class="fa-solid fa-save"></i>
       </button>
-      <button>
+      <button :disabled="!isWorkoutComplete" @click="handleSaveWorkout">
         Complete
         <i class="fa-solid fa-check"></i>
       </button>
@@ -103,6 +111,10 @@ const handleCloseModal = () => selectedExercise.value = ""
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 1rem;
+}
+
+.workout-grid-row {
+  align-items: center;
 }
 
 .workout-grid-row,

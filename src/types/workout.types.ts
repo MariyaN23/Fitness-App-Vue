@@ -16,4 +16,8 @@ export type IExerciseDescriptions = {
     [exerciseName: string]: string
 }
 
+export type ExerciseData = {
+    [key: number]: IExerciseDescriptions
+}
+
 export type IGymHealthFacts = string[]

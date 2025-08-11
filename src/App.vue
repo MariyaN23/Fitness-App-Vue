@@ -3,7 +3,7 @@ import Welcome from "./components/pages/Welcome.vue";
 import Layout from "./components/layouts/Layout.vue";
 import Dashboard from "./components/pages/Dashboard.vue";
 import Workout from "./components/pages/Workout.vue";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { workoutProgram } from "./utils";
 import type { ExerciseData } from "./types/workout.types.ts";
 
@@ -25,9 +25,7 @@ const isWorkoutComplete = computed(() => {
     return false
   }
 
-  const isCompleteCheck = Object.values(currentWorkout).every(ex => !!ex)
-  console.log('is complete:', isCompleteCheck)
-  return isCompleteCheck
+  return Object.values(currentWorkout).every(ex => !!ex)
 })
 
 const firstIncompleteWorkoutIndex = computed(() => {
@@ -55,25 +53,42 @@ const handleSelectedWorkout = (idx: number) => {
 const handleSaveWorkout = () => {
   localStorage.setItem('workouts', JSON.stringify(data.value))
   selectedDisplay.value = 2
-  selectedDisplay.value = -1
+  selectedWorkout.value = -1
 }
+
+const handleResetPlan = () => {
+  selectedDisplay.value = 2
+  selectedWorkout.value = -1
+  data.value = defaultData
+  localStorage.removeItem('workouts')
+  window.location.reload()
+}
+
+onMounted(() => {
+  if (localStorage.getItem('workouts')) {
+    selectedDisplay.value = 2
+  }
+})
 </script>
 
 <template>
   <Layout>
-    <Welcome :handleChangeDisplay="handleChangeDisplay" v-if="selectedDisplay === 1" />
+    <Welcome
+        :handleChangeDisplay="handleChangeDisplay"
+        v-if="selectedDisplay === 1"
+    />
     <Dashboard
         :firstIncompleteWorkoutIndex="firstIncompleteWorkoutIndex"
         :handleSelectedWorkout="handleSelectedWorkout"
-        :handleChangeDisplay="handleChangeDisplay"
+        :handleResetPlan="handleResetPlan"
         v-if="selectedDisplay === 2"
     />
     <Workout
         :handleSaveWorkout="handleSaveWorkout"
         :isWorkoutComplete="isWorkoutComplete"
-        v-if="workoutProgram?.[selectedWorkout]"
         :data="data"
         :selectedWorkout="selectedWorkout"
+        v-if="workoutProgram?.[selectedWorkout]"
     />
   </Layout>
 </template>

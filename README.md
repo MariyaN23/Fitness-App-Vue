@@ -1,5 +1,17 @@
-# Vue 3 + TypeScript + Vite
+# 🥇 FITGRAM 🥇
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## Application Description
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+Fitness app created by following YouTube tutorial with some additions \
+[Vue.js Beginner Course | Build & Deploy a Modern Fitness App](https://youtu.be/JAgeFLJYrUY?si=2zXolYwlfHMoMsuq)
+
+## Functionality
+You can start training and save completed workouts info. \
+This info is stored in localStorage
+
+## Stylization
+The app is styled with CSS
+
+## Tools
+- TypeScript
+- Vue 3

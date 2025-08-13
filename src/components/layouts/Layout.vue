@@ -1,9 +1,43 @@
 <script setup lang="ts">
+import { onMounted, ref, watch } from "vue";
+
+const isDark = ref(false)
+const toggleTheme = () => {
+  isDark.value = !isDark.value
+}
+
+const applyTheme = () => {
+  if (isDark.value) {
+    document.documentElement.classList.add('dark');
+    document.documentElement.setAttribute('data-theme', 'dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+    document.documentElement.setAttribute('data-theme', 'light')
+  }
+}
+
+onMounted(() => {
+  const savedTheme = localStorage.getItem('theme')
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+  isDark.value = savedTheme ? savedTheme === 'dark' : prefersDark
+  applyTheme()
+})
+
+watch(isDark, (newVal) => {
+  localStorage.setItem('theme', newVal ? 'dark' : 'light')
+  applyTheme()
+})
 </script>
 
 <template>
   <header>
-    <h1 class="text-gradient">FITGRAM</h1>
+    <div>
+      <h1 class="text-gradient">FITGRAM</h1>
+      <button @click="toggleTheme()">
+        <i class="fa-solid fa-sun" v-show="isDark"></i>
+        <i class="fa-solid fa-moon" v-show="!isDark"></i>
+      </button>
+    </div>
   </header>
   <main>
     <slot />
@@ -26,6 +60,12 @@ footer {
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+}
+
+header div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 main {

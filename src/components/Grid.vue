@@ -12,7 +12,6 @@ const changeSelectedWorkout = (id: number): void => {
   if (id > firstIncompleteWorkoutIndex) return
   handleSelectedWorkout(id)
 }
-console.log(firstIncompleteWorkoutIndex)
 </script>
 
 <template>
